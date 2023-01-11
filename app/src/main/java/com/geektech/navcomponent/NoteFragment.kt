@@ -10,13 +10,18 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.NavHostFragment
 import com.geektech.navcomponent.databinding.FragmentNoteBinding
 
-class NoteFragment : Fragment() {
+class NoteFragment : Fragment(), IItemClick {
     lateinit var binding: FragmentNoteBinding
+    lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setFragmentResultListener("note"){ _, bundle ->
-           
+            var note: Note
+            note= bundle.getSerializable("note") as Note
+            binding.textView.text=note.title
+            binding.textView2.text=note.desc
+            adapter.addItem(bundle.getSerializable("note") as Note)
         }
     }
     override fun onCreateView(
@@ -36,5 +41,9 @@ class NoteFragment : Fragment() {
         binding.open.setOnClickListener {
         controller.navigate(R.id.addNoteFragment)
         }
+    }
+
+    override fun edit(pos: Int) {
+
     }
 }
