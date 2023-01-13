@@ -10,20 +10,19 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.NavHostFragment
 import com.geektech.navcomponent.databinding.FragmentNoteBinding
 
-class NoteFragment : Fragment(), IItemClick {
+class NoteFragment : Fragment() {
     lateinit var binding: FragmentNoteBinding
     lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFragmentResultListener("note"){ _, bundle ->
-            var note: Note
-            note= bundle.getSerializable("note") as Note
-            binding.textView.text=note.title
-            binding.textView2.text=note.desc
-            adapter.addItem(bundle.getSerializable("note") as Note)
+        setFragmentResultListener("note") { _, bundle ->
+            val note = bundle.getSerializable("newNote") as Note
+            note.title
+            adapter.addItem(note)
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,15 +34,13 @@ class NoteFragment : Fragment(), IItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = NoteAdapter()
+        binding.recycler.adapter=adapter
         val navHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val controller = navHostFragment.navController
         binding.open.setOnClickListener {
-        controller.navigate(R.id.addNoteFragment)
+            controller.navigate(R.id.addNoteFragment)
         }
-    }
-
-    override fun edit(pos: Int) {
-
     }
 }

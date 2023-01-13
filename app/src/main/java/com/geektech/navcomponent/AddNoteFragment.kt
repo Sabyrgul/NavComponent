@@ -28,7 +28,7 @@ class AddNoteFragment : Fragment() {
         binding.send.setOnClickListener {
             val bundle=Bundle()
             var newNote=Note(binding.editText.text.toString(),binding.editText2.text.toString())
-            bundle.putSerializable(newNote.title,newNote.desc)
+            bundle.putSerializable("key",newNote)
             setFragmentResult("note",bundle)
             controller.navigateUp()
         }

@@ -1,32 +1,31 @@
 package com.geektech.navcomponent
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.geektech.navcomponent.databinding.FragmentNoteBinding
+import com.geektech.navcomponent.databinding.ItemRowBinding
 
 
-class NoteAdapter(val listener: IItemClick) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
-    private var list: MutableList<Note> = ArrayList()
+    var list: MutableList<Note> = ArrayList()
+    lateinit var binding: ItemRowBinding
 
-    fun getList(): MutableList<Note>{
-        return list
-    }
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(note: Note) {
+            binding.itemText.text = note.title
+            binding.itemTextDesc.text = note.desc
+            notifyDataSetChanged()
 
-        inner class ViewHolder(private val binding: FragmentNoteBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-            fun bind(note: Note){
-                binding.textView.text = note.title
-                binding.textView2.text = note.desc
-
-            }
         }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = FragmentNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(view)
+        binding=ItemRowBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -38,14 +37,14 @@ class NoteAdapter(val listener: IItemClick) : RecyclerView.Adapter<NoteAdapter.V
     }
 
 
-fun edit(pos: Int, note: Note) {
-    list.set(pos,note)
-    notifyItemChanged(pos)
-}
+    fun edit(pos: Int, note: Note) {
+        list.set(pos, note)
+        notifyItemChanged(pos)
+    }
 
     fun addItem(note: Note) {
         list.add(note)
-        notifyItemInserted(list.size)
+        notifyDataSetChanged()
     }
 
 
